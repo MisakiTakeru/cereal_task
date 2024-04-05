@@ -11,9 +11,9 @@ df = df.drop('rating', axis = 1)
 Parameters
 ----------
 cat : string or [string]
-    one of the categories in the dataframe
+    the categories in the dataframe
 op_type : string or [string]
-    an operator function from pythons operator package
+    operator functions from pythons operator package
     possible calls are :
         lt, le, eq, ne, ge ,gt
 cond : string or int or float or list of string, int and float
@@ -24,10 +24,14 @@ applies it to the type from the dataframe category and the condition.
 """
 def filter_df(cat, op_type, cond):
     if type(cat) == list and type(op_type) == list and type(cond) == list:
+        if len(cat) != len(op_type) or len(cat) != len(cond):
+            raise AttributeError('all input values must be of same length')
 # creates a list of mapped conditions, and then ands them all together to allow
 # multiple filtering conditions.
         mapped = list(map(lambda c, o, con : getattr(op, o)(getattr(df,c), con), cat, op_type, cond))
         return df.loc[functools.reduce(lambda x, y : x & y, mapped)]
+    elif type(cat) == list or type(op_type) == list or type(cond) == list:
+        raise AttributeError('all input values must either be a single input or list')
     else:
         return df.loc[getattr(op, op_type)(getattr(df,cat), cond)]
 
