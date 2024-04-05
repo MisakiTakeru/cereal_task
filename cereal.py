@@ -24,13 +24,56 @@ applies it to the type from the dataframe category and the condition.
 def filter_df(cat, op_type, cond):
     return df.loc[getattr(op, op_type)(getattr(df,cat), cond)]
 
+"""
+Parameters
+----------
+ids : int
+    The id that will be updated
 
+cat : string
+    The category that will be updated on the ids
+vals : variable
+    What the category will be updated by
+"""
+def update(ids, cat, vals):
+    if type(cat) == list and type(vals) == list:
+        new_df = pd.DataFrame(dict(map(lambda k, v : (k,v) , cat, vals)), index = [ids])
+    else:
+        new_df = pd.DataFrame({cat : vals}, index = [ids])
+    df.update(new_df)
+    
+
+"""
+Parameters
+----------
+name, mfr, types : string
+
+calories, protein, fat, sodium, sugars, potass, vitamins, shelf : integer
+
+fiber, carbo, weight, cups : float
+"""
+def add_row(name, mfr, types, calories, protein, fat, sodium, fiber, carbo, sugars,
+            potass, vitamins, shelf, weight, cups):
+    cats = ['name', 'mfr', 'type', 'calories', 'protein', 'fat', 'sodium', 'fiber',
+           'carbo', 'sugars', 'potass', 'vitamins', 'shelf', 'weight', 'cups']
+    vals = [name, mfr, types, calories, protein, fat, sodium, fiber, carbo, sugars,
+                potass, vitamins, shelf, weight, cups]
+    new_row = dict(map(lambda k, v : (k,v) , cats, vals))
+    df.loc[len(df)] = new_row
+
+
+def delete(df, ids):
+    return df.drop(ids, axis = 0)
 
 """
 Parameters
 ----------
 ids : int
     id for a given product
+
+gets the name of the id given, and then checks if there exists a image
+corresponding to the name and if there is shows it and returns True
+otherwise it returns false.
 """
 def get_image(ids):
 # Gets the img file names, and creates a version that has turned all
