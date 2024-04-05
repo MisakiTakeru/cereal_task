@@ -9,7 +9,7 @@ class Testdataframe(unittest.TestCase):
         self.columns = ['name', 'mfr', 'type', 'calories', 'protein', 'fat', 
                         'sodium', 'fiber', 'carbo', 'sugars', 'potass', 
                         'vitamins', 'shelf', 'weight', 'cups']
-        file = 'C:/Users/KOM/Documents/git/cereal_task/data/Cereal.csv'
+        file = 'data/Cereal.csv'
         self.df = pd.read_csv(file, sep = ';', header = 0, skiprows = [1], on_bad_lines = 'skip')
         self.df = self.df.drop('rating', axis = 1)
         

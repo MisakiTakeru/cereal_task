@@ -4,7 +4,7 @@ import operator as op
 import os
 import functools
 
-file = 'C:/Users/KOM/Documents/git/cereal_task/data/Cereal.csv'
+file = 'data/Cereal.csv'
 df = pd.read_csv(file, sep = ';', header = 0, skiprows = [1], on_bad_lines = 'skip')
 df = df.drop('rating', axis = 1)
 """
