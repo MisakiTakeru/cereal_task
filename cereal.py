@@ -22,7 +22,9 @@ cond : string or int or float or list of string, int and float
 uses getattr to get the operator functions from the package operator and
 applies it to the type from the dataframe category and the condition.
 """
-def filter_df(cat, op_type, cond):
+def filter_df(cat = None, op_type = None, cond = None):
+    if cat == None:
+        return df
     if type(cat) == list and type(op_type) == list and type(cond) == list:
         if len(cat) != len(op_type) or len(cat) != len(cond):
             raise AttributeError('all input values must be of same length')
@@ -71,7 +73,7 @@ def add_row(name, mfr, types, calories, protein, fat, sodium, fiber, carbo, suga
                 potass, vitamins, shelf, weight, cups]
     new_row = dict(map(lambda k, v : (k,v) , cats, vals))
     df.loc[len(df)] = new_row
-
+    return df
 
 def delete(df, ids):
     return df.drop(ids, axis = 0)
