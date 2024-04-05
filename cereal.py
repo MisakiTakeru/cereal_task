@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import operator as op
 import os
+import functools
 
 file = 'C:/Users/KOM/Documents/git/cereal_task/data/Cereal.csv'
 df = pd.read_csv(file, sep = ';', header = 0, skiprows = [1], on_bad_lines = 'skip')
@@ -9,20 +10,26 @@ df = df.drop('rating', axis = 1)
 """
 Parameters
 ----------
-cat : string
+cat : string or [string]
     one of the categories in the dataframe
-op_type : string
+op_type : string or [string]
     an operator function from pythons operator package
     possible calls are :
         lt, le, eq, ne, ge ,gt
-cond : string or int or float
+cond : string or int or float or list of string, int and float
     the condition which the data is compared to
     
 uses getattr to get the operator functions from the package operator and
 applies it to the type from the dataframe category and the condition.
 """
 def filter_df(cat, op_type, cond):
-    return df.loc[getattr(op, op_type)(getattr(df,cat), cond)]
+    if type(cat) == list and type(op_type) == list and type(cond) == list:
+# creates a list of mapped conditions, and then ands them all together to allow
+# multiple filtering conditions.
+        mapped = list(map(lambda c, o, con : getattr(op, o)(getattr(df,c), con), cat, op_type, cond))
+        return df.loc[functools.reduce(lambda x, y : x & y, mapped)]
+    else:
+        return df.loc[getattr(op, op_type)(getattr(df,cat), cond)]
 
 """
 Parameters
